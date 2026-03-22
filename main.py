@@ -52,8 +52,8 @@ if __name__ == "__main__":
     # CASE 3 (Dense):  size=30, num_defects=10, truss_type="warren", seed=99
     
     run_simulation(
-        size=20, 
-        num_defects=6, 
+        size=30, 
+        num_defects=10, 
         truss_type="pratt", 
-        seed=42
+        seed=99
     )
