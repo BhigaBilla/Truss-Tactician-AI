@@ -5,53 +5,55 @@ from src.search import a_star
 from src.adversarial import evaluation_function
 from src.visualize import animate_inspection
 
-def run_simulation():
-    # 1. Setup Mechanical Environment
-    env = StructuralGrid(size=20)
-    drone_a_pos = (1, 1)
-    drone_b_pos = (18, 18)
-    total_score_a = 0
+def run_simulation(size=20, num_defects=5, truss_type="pratt", seed=42):
+    """
+    size: Grid dimensions (N x N)
+    num_defects: Total damage points to generate
+    truss_type: "pratt" or "warren" (changes the obstacle design)
+    seed: Fixed number for reproducible results
+    """
+    # 1. Initialize the Environment
+    env = StructuralGrid(size=size, num_defects=num_defects, 
+                         truss_type=truss_type, seed=seed)
     
-    print("--- AeroScan-AI: Structural Inspection Initialized ---")
-    print(f"Truss Grid Size: {env.size}x{env.size}")
-    print(f"Detected Damage Points: {len(env.defects)}")
-    print("-" * 50)
-
-    # 2. Strategy Phase (Adversarial Target Selection)
-    # We use Minimax logic to pick the best target based on priority and competition
+    # Start positions for the drones
+    drone_a_pos = (1, 1)
+    drone_b_pos = (size-2, size-2)
+    
+    print(f"\n--- Running Simulation: {size}x{size} ({truss_type.upper()}) ---")
+    
+    # 2. Strategy: Select the best target using Adversarial Logic
     target_a = evaluation_function(drone_a_pos, drone_b_pos, env.defects)
     
-    if target_a:
-        print(f"[STRATEGY] Drone A targeting high-priority crack at: {target_a}")
-        print(f"[STRATEGY] Mechanical Priority Weight: {env.defects[target_a]}")
-    else:
-        print("No targets available.")
+    if not target_a:
+        print("Error: No valid targets found.")
         return
 
-    # 3. Execution Phase (A* Pathfinding)
-    # This generates the performance metrics for your Final Report [cite: 70]
+    # 3. Execution: Run A* Pathfinding
     start_time = time.perf_counter()
-    path_a, nodes = a_star(env, drone_a_pos, target_a)
+    path, nodes = a_star(env, drone_a_pos, target_a)
     end_time = time.perf_counter()
 
-    # 4. Results Compilation
-    exec_time_ms = (end_time - start_time) * 1000
-    print("-" * 50)
-    print(f"--- PERFORMANCE ANALYSIS ---")
-    print(f"Algorithm: A* Search with Manhattan Heuristic")
-    print(f"Computation Time: {exec_time_ms:.4f} ms")
-    print(f"State-Space Nodes Expanded: {nodes}")
-    print(f"Path Length: {len(path_a)} units")
-    print("-" * 50)
+    # 4. Output Performance Metrics (For your Report Table)
+    exec_time = (end_time - start_time) * 1000
+    print(f"Target Selected: {target_a}")
+    print(f"Pathfinding Time: {exec_time:.2f} ms")
+    print(f"Nodes Expanded: {nodes}")
+    print(f"Path Length: {len(path)} units")
 
-    # 5. Presentation Layer (Visualization) 
-    # This satisfies the requirement for "high-quality visualization"
-    print("Generating Graphical Representation...")
-    animate_inspection(env, path_a)
+    # 5. Visualization (Satisfies Phase 2 requirements)
+    animate_inspection(env, path)
 
 if __name__ == "__main__":
-    # Ensure results directory exists for logs
-    if not os.path.exists('results/logs'):
-        os.makedirs('results/logs')
+    # CONFIGURATION AREA: Change these values to get different report figures
+    # ----------------------------------------------------------------------
+    # CASE 1 (Simple): size=10, num_defects=3, truss_type="pratt", seed=1
+    # CASE 2 (Medium): size=20, num_defects=6, truss_type="pratt", seed=42
+    # CASE 3 (Dense):  size=30, num_defects=10, truss_type="warren", seed=99
     
-    run_simulation()
+    run_simulation(
+        size=20, 
+        num_defects=5, 
+        truss_type="pratt", 
+        seed=42
+    )
