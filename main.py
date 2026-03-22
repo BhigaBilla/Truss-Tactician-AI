@@ -47,13 +47,13 @@ def run_simulation(size=20, num_defects=5, truss_type="pratt", seed=42):
 if __name__ == "__main__":
     # CONFIGURATION AREA: Change these values to get different report figures
     # ----------------------------------------------------------------------
-    CASE 1 (Simple): size=10, num_defects=3, truss_type="pratt", seed=1
+   # CASE 1 (Simple): size=10, num_defects=3, truss_type="pratt", seed=1
     # CASE 2 (Medium): size=20, num_defects=6, truss_type="pratt", seed=42
     # CASE 3 (Dense):  size=30, num_defects=10, truss_type="warren", seed=99
     
     run_simulation(
-        size=20, 
-        num_defects=5, 
+        size=10, 
+        num_defects=3, 
         truss_type="pratt", 
-        seed=42
+        seed=1
     )
