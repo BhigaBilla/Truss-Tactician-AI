@@ -75,4 +75,4 @@ if __name__ == "__main__":
         print(f"[COMPLETED] {case['name']}")
         print("-" * 60)
         
-    print("\nBatch processing complete. Please record the terminal data for your LaTeX report.")
+    print("\nBatch processing complete.")
