@@ -31,7 +31,6 @@ The repository is organized into a modular package structure to ensure clarity:
     * adversarial.py: Contains the minimax evaluation logic and target selection.
     * visualize.py: Handles the rendering of inspection paths using matplotlib.
 * /results: Stores performance data for analysis.
-    * /logs: CSV records of nodes expanded and execution time.
     * /plots: Saved figures of drone paths for report inclusion.
 * /docs: Repository for the project proposal and final report.
 
