@@ -4,7 +4,7 @@ from src.environment import StructuralGrid
 from src.search import a_star
 
 from src.adversarial import minimax_alpha_beta, evaluation_function 
-from src.visualize import animate_inspection
+from src.visualize import animate_inspection, reconstruct_path
 
 def run_simulation(size=30, num_defects=10, truss_type="pratt", seed=99):
    
@@ -34,11 +34,11 @@ def run_simulation(size=30, num_defects=10, truss_type="pratt", seed=99):
 
 
     start_a = time.perf_counter()
-    path_a, nodes_a = a_star(env, drone_a_pos, target_a)
+    came_from_a, nodes_a = a_star(env, drone_a_pos, target_a)
     exec_a = (time.perf_counter() - start_a) * 1000
     
     start_b = time.perf_counter()
-    path_b, nodes_b = a_star(env, drone_b_pos, target_b)
+    came_from_b, nodes_b = a_star(env, drone_b_pos, target_b)
     exec_b = (time.perf_counter() - start_b) * 1000
 
     
@@ -47,8 +47,9 @@ def run_simulation(size=30, num_defects=10, truss_type="pratt", seed=99):
     print(f"Drone B (Greedy)  -> Target: {target_b} | Nodes: {nodes_b} | Time: {exec_b:.2f} ms")
     print("-" * 60)
 
-   
-    animate_inspection(env, path_a, path_b, target_a, target_b)
+    path_a = reconstruct_path(came_from_a, drone_a_pos, target_a)
+    path_b = reconstruct_path(came_from_b, drone_b_pos, target_b)
+    animate_inspection(env, path_a, path_b, target_a, target_b, size)
 
 if __name__ == "__main__":
     # Define the Test Cases for the Final Report Table

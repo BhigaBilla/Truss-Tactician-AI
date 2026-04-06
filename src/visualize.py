@@ -1,10 +1,22 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+def reconstruct_path(came_from, start, goal):
+    current = goal
+    path = []
+    
+    while current != start:
+        path.append(current)
+        current = came_from.get(current)
+        if current is None:
+            return []  # no path
+    
+    path.append(start)
+    path.reverse()
+    return path
 
 
-
-def animate_inspection(env, path_a, path_b, target_a, target_b):
+def animate_inspection(env, path_a, path_b, target_a, target_b, size):
     fig, ax = plt.subplots(figsize=(10, 8))
     grid_display = np.zeros((env.size, env.size))
     for x, y in env.obstacles: grid_display[x, y] = 1
@@ -30,7 +42,11 @@ def animate_inspection(env, path_a, path_b, target_a, target_b):
         ax.scatter(py[0], px[0], color='orange', s=100, marker='o', label='B Start')
         ax.scatter(target_b[1], target_b[0], color='orange', s=200, marker='*', label='B Target')
 
-    plt.title("Truss-Tactician: Dual-Drone Adversarial Inspection")
+    if size == 10: case = 'CASE 1: Simple'
+    elif size == 20: case = 'CASE 2: Medium'
+    else: case = 'CASE 3: Dense'
+
+    plt.title("Truss-Tactician: Dual-Drone Adversarial Inspection ("+case+")")
     plt.legend(loc='upper right', bbox_to_anchor=(1.2, 1))
     plt.grid(alpha=0.3)
     plt.show()
